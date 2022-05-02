@@ -1,4 +1,22 @@
 # Secure Personal Cloud
+## Linus client Usage:
+usage: spc.py [-h] [--login LOGIN] [--logout LOGOUT] [--remove_account REMOVE_ACCOUNT] [-u UPLOAD] [-d DOWNLOAD] [-l] [--delete DELETE]
+              [--encdec ENCDEC ENCDEC] [-sfc SYNC_FROM_CLIENT] [-sfs SYNC_FROM_SERVER] [-v VERSION] [--help_section]
+
+optional arguments:<br/>
+  -h, --help            show this help message and exit<br/>
+  --login LOGIN<br/>
+  --logout LOGOUT<br/>
+  --remove_account REMOVE_ACCOUNT<br/>
+  -u UPLOAD, --upload UPLOAD<br/>
+  -d DOWNLOAD, --download DOWNLOAD<br/>
+  -l, --list<br/>
+  --delete DELETE<br/>
+  --encdec ENCDEC ENCDEC<br/>
+  -sfc SYNC_FROM_CLIENT, --sync_from_client SYNC_FROM_CLIENT<br/>
+  -sfs SYNC_FROM_SERVER, --sync_from_server SYNC_FROM_SERVER<br/>
+  -v VERSION, --version VERSION<br/>
+  --help_section<br/>
 ## Tasks Accomplished
 ### 1. Web Server:
 * Registration of Users
@@ -62,13 +80,14 @@
 * File content in encrypted binary form.
 * Owner of the file as foreign key.
 ### 7. Libraries and Modules:
-• Front-end : Bootstrap
-• API : DjangoREST framework
-• Authentication : JWD token
-• Encrpytion-Decryption : OpenSSL library
-• Encrpytion-Decryption : CryptoJS
-• Python : os, argparse, json and request modules
+* Front-end : Bootstrap
+* API : DjangoREST framework
+* Authentication : JWD token
+* Encrpytion-Decryption : OpenSSL library
+* Encrpytion-Decryption : CryptoJS
+* Python : os, argparse, json and request modules
 
 ## References
 [1] Django documentation, available at [Django-2.1](https://docs.djangoproject.com/en/2.1/)
+<br />
 [2] Python documentation, available at [Python3](https://docs.python.org/3/)
