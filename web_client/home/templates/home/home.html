@@ -1,0 +1,37 @@
+{% load static %}
+	<!--to be changed afterwards-->
+	<!--let home and about be inherited from same code-->
+	<!--include and use bootstrap-->
+<!DOCTYPE html>
+	<html>
+	<head>
+		<title>SPC Home</title>
+		<link rel="stylesheet" type="text/css" href="{% static 'home/main.css' %}">
+	</head>
+	<body>
+		<div class="bgimage">
+			<div class="menu">
+				<div class="heading">
+					<h4>SECURED PERSONAL CLOUD</h4>
+				</div>
+				<div class="options">
+					<ul>
+						<a href="{% url 'homepage' %}" id="firstlist">HOME</a>
+						<a href="{% url 'aboutpage' %}">USING CLOUD</a>
+						<a href="">DOWNLOAD</a>
+						<a href="">VIEW</a>
+						<a href="">HELP</a>
+					</ul>
+				</div>
+			</div>
+			<div class="text">
+				<h4>DESIGN * DEVELOPMENT * BRANDING</h4>
+				<h1>CREATIVE & EXPERIENCED</h1>
+				<h3>WE ARE THE WORLD'S TOP CREATIVE DESIGN AGENCIES</h3>
+				<a href="{% url 'login' %}" class="button">LOGIN</a>
+				<a href="{% url 'register' %}" class="button">REGISTER</a>
+			</div>
+		</div>
+
+	</body>
+</html>

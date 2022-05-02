@@ -1,0 +1,14 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+	<h1>{{ user.username }}</h1>
+	<a href="{% url 'logout' %}">Logout</a>
+	{% for file in files %}
+		<h2>{{ file.filename }} {{ file.filetype }}</h2>
+	{% endfor %}
+</body>
+</html>

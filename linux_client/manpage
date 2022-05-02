@@ -1,0 +1,38 @@
+.\" Manpage for spc.
+.TH man 8 "Nov 24, 2018" "1.0.0.1" "spc man page"
+.SH NAME
+spc \- multipurpose client-side application 
+.SH SYNOPSIS
+spc [OPTION] {ARG}
+ARG:
+user,file,directory
+.SH DESCRIPTION
+spc is a terminal-based client-side application to remotely access and modify files on a server. 
+.SH OPTIONS
+spc takes the following options:
+--login : login to server with ARG=username
+
+--logout : logout from server with ARG=username
+
+--upload -u : upload file to server with ARG=filepath
+
+--download -d : download file from server with ARG=filepath
+
+--delete : delete file from server with ARG=filepath
+
+--list -l : display list of all the uploaded files on the server
+
+--sync_from_client -sfc : sync given directory from client with ARG=directory_path
+
+--sync_from_server -sfs : sync given directory from server with ARG=directory_path
+
+--version -v : print version of spc
+
+--help_section : display help section for spc
+
+--help -h : display help
+
+.SH BUGS
+No known bugs.
+.SH AUTHOR
+Coder's Creed

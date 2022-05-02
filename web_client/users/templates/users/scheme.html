@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+	<h1>{{ user.username }}</h1>
+	<a href="{% url 'logout' %}">Logout</a>
+	<form>
+		<select name="dropdown">
+			<option value="rsa">RSA</option>
+			<option value="aes">AES</option>
+			<option value="des">DES</option>
+		</select>
+	</form>
+</body>
+</html>
