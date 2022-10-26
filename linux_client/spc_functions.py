@@ -168,7 +168,7 @@ def change_sync_status(syncstatus):
         'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36',
         'Authorization':token
         }
-    url='http://10.2.224.70:8000/files/sync/'
+    url='http://127.0.0.1:8000/files/sync/'
     r=requests.post(url,data=data,headers=headers)
 
 
@@ -178,7 +178,7 @@ def get_sync_status():
         'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36',
         'Authorization':token
         }
-    url='http://10.2.224.70:8000/files/get-sync/'
+    url='http://127.0.0.1:8000/files/get-sync/'
     r=requests.get(url,headers=headers)
     json_data=json.loads(r.content)
     print(json_data)
@@ -217,7 +217,7 @@ def login(user):
             login_user(user)
         elif (response == 'N' or response == 'n'):
             print('To use this service, you need to register at :')
-            print('http://10.2.224.70:8000/register/')
+            print('http://127.0.0.1:8000/register/')
         
 
 def login_user(user):
@@ -268,7 +268,7 @@ def req_send(user,password):
         'action':'login'
         }
     with requests.Session() as s:
-        url='http://10.2.224.70:8000/files/api-token-auth/'
+        url='http://127.0.0.1:8000/files/api-token-auth/'
         r=s.post(url, data=login_data, headers=headers)
         if(r.status_code == 200):
             Token='JWT '+(r.json())['token']
@@ -315,24 +315,24 @@ def upload_file(filepath):
 
 def upload_file_info(filepath):
     filename=file_name(filepath)
-    filetype=file_type(filename)
-    md5sum=mdsum(filepath)
+    # filetype=file_type(filename)
+    # md5sum=mdsum(filepath)
     relfilepath=os.path.relpath(filepath,os.getenv('HOME'))
     token=get_token()
-    fileinfo={
-        'filename': relfilepath,
-        'filetype': filetype,
-        'md5sum': md5sum
-        }
+    # fileinfo={
+    #     'filename': relfilepath,
+    #     'filetype': filetype,
+    #     'md5sum': md5sum
+    # }
     headers={
         'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36',
         'Authorization':token
         }
-    url2='http://10.2.224.70:8000/files/'+relfilepath+'/'
+    url2='http://127.0.0.1:8000/files/'+relfilepath+'/'
     r2=requests.get(url2,headers=headers)
     if (r2.status_code == 404):
-        url1='http://10.2.224.70:8000/files/create/'
-        r1=requests.post(url1,data=fileinfo,headers=headers)
+        # url1='http://127.0.0.1:8000/files/create/'
+        # r1=requests.post(url1,data=fileinfo,headers=headers)
         return 1
     elif (r2.status_code == 200):
         response=input('File already exists. Do you wish to overwrite it? [Y/N]')
@@ -348,27 +348,33 @@ def upload_file_content(filepath):
     user=current_user()
     scheme=get_scheme(user)
     filename=file_name(filepath)
+    filetype=file_type(filename)
+    md5sum=mdsum(filepath)
     relfilepath=os.path.relpath(filepath,os.getenv('HOME'))
     encryptedfilepath=filepath+'.'+scheme
     token=get_token()
     if (scheme == 'aes'):
-        os.system('cat '+filepath+' | openssl enc -base64 | openssl aes-256-cbc -a -salt > '+encryptedfilepath)
+        os.system('cat '+filepath+' | openssl enc -base64 | openssl aes-256-cbc -pbkdf2 -a -salt > '+encryptedfilepath)
     elif (scheme == 'des'):
-         os.system('cat '+filepath+' | openssl enc -base64 | openssl des-cbc -a -salt > '+encryptedfilepath)
+         os.system('cat '+filepath+' | openssl enc -base64 | openssl des-cbc -pbkdf2 -a -salt > '+encryptedfilepath)
     content=''
-    with open(encryptedfilepath,'r') as f:
+    with open(encryptedfilepath,'rb') as f:
         content += f.read()
     content.replace('\n','')
     os.system('rm -f '+encryptedfilepath)
     fileinfo={
         'filename': relfilepath,
-        'content': content
-        }
+        'file': content,
+        'filetype': filetype,
+        'md5sum': md5sum
+    }
     headers={
         'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36',
         'Authorization':token
     }
-    url='http://10.2.224.70:8000/files/upload/'
+    print(fileinfo)
+
+    url='http://127.0.0.1:8000/files/upload/'
     r=requests.post(url,data=fileinfo,headers=headers)
     if(r.status_code == 201):
         return True
@@ -388,7 +394,7 @@ def display_filelist():
             'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36',
             'Authorization':token
         }
-    url='http://10.2.224.70:8000/files/'
+    url='http://127.0.0.1:8000/files/'
     r=requests.get(url, headers=headers)
     if r.status_code != 500:
         json_lst=r.json()
@@ -407,7 +413,7 @@ def delete_file(filepath):
         'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36',
         'Authorization':token
     }
-    url='http://10.2.224.70:8000/files/'+relfilepath+'/delete/'
+    url='http://127.0.0.1:8000/files/'+relfilepath+'/delete/'
     r=requests.delete(url,headers=headers)
     if (r.status_code == 204):
         print('File deleted successfully.')
@@ -460,7 +466,7 @@ def download_file(filepath):
         'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36',
         'Authorization': token
     }
-    url='http://10.2.224.70:8000/files/'+relfilepath+'/'
+    url='http://127.0.0.1:8000/files/'+relfilepath+'/'
     r=requests.get(url,headers=headers)
     json_data=json.loads(r.content)
     json_content=json.dumps(json_data['content'])
@@ -474,7 +480,7 @@ def download_file(filepath):
     elif (scheme == 'des'):
         with open('input.aes','w') as f:
             f.write(re.sub('(.{64})','\\1\n',json_content,0,re.DOTALL))
-        os.system('cat input.aes | openssl enc -base64 -d | openssl des-cbc -d -a | openssl enc -base64 -d > '+os.getenv('HOME')+'/'+relfilepath)
+        os.system('cat input.aes | openssl enc -base64 -d | openssl des-cbc -pbkdf2 -d -a | openssl enc -base64 -d > '+os.getenv('HOME')+'/'+relfilepath)
         os.system('rm -f input.aes')
     # md5sum=mdsum(os.getenv('HOME')+'/'+relfilepath)
     # if (json_md5sum.split('\"')[1] == md5sum):
@@ -493,7 +499,7 @@ def sync_file_from_client(filepath):
         'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36',
         'Authorization':token
     }
-    url='http://10.2.224.70:8000/files/'+relfilepath+'/'
+    url='http://127.0.0.1:8000/files/'+relfilepath+'/'
     r=requests.get(url,headers=headers)
     print('Syncing: '+filename)
     if (r.status_code == 404):
@@ -516,7 +522,7 @@ def sync_file_from_server(filepath):
         'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36',
         'Authorization':token
     }
-    url='http://10.2.224.70:8000/files/'+relfilepath+'/'
+    url='http://127.0.0.1:8000/files/'+relfilepath+'/'
     r=requests.get(url,headers=headers)
     json_data=json.loads(r.content)
     json_md5sum=json.dumps(json_data['md5sum'])
@@ -547,7 +553,7 @@ def sync_delete_from_server(dirpath):
         'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36',
         'Authorization':token
     }
-    url='http://10.2.224.70:8000/files/'
+    url='http://127.0.0.1:8000/files/'
     r=requests.get(url,headers=headers)
     json_data=json.loads(r.content)
     for file_info in json_data:
@@ -566,7 +572,7 @@ def sync_dir_from_server(dirpath):
             'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36',
             'Authorization':token
         }
-    url='http://10.2.224.70:8000/files/'
+    url='http://127.0.0.1:8000/files/'
     r=requests.get(url, headers=headers)
     json_data=r.json()
     for file_info in json_data:
@@ -603,7 +609,7 @@ def sync_delete_from_client(dirpath):
             'user-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36',
             'Authorization':token
             }
-            url='http://10.2.224.70:8000/files/'+reldirpath+'/'+d+'/'
+            url='http://127.0.0.1:8000/files/'+reldirpath+'/'+d+'/'
             r=requests.get(url,headers=headers)
             if (r.status_code == 404):
                 os.system('rm -f '+homedirpath+'/'+d)

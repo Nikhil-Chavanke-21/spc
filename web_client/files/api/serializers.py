@@ -13,17 +13,7 @@ class FileSerializer(ModelSerializer):
 		fields=['filename','filetype','md5sum','file']
 	def create(self, validated_data):
 		print(validated_data)
-		filename=validated_data['filename']
-		filetype=validated_data['filetype']
-		md5sum=validated_data['md5sum']
-		file=validated_data['file']
-		file_obj=File(
-			filename=filename,
-			filetype=filetype,
-			md5sum=md5sum,
-			file=file,
-			)
-		file_obj.save()
+		File.objects.create(**validated_data)
 		return validated_data
 
 class LoginSerializer(ModelSerializer):

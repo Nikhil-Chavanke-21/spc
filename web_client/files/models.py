@@ -8,7 +8,7 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 #
 class File(models.Model):
-	file=models.BinaryField()
+	file=models.BinaryField(max_length=4096*4096*4096, editable=True)
 	filename=models.CharField(max_length=100)#primary_key=true
 	filetype=models.CharField(max_length=50,null=True)
 	md5sum=models.CharField(max_length=32,null=True)

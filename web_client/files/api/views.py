@@ -1,3 +1,6 @@
+from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST, HTTP_201_CREATED
+
+from matplotlib.pyplot import get
 from rest_framework.generics import (
 	ListAPIView, 
 	RetrieveAPIView,
@@ -15,10 +18,11 @@ from files.models import File
 from .serializers import FileSerializer, LoginSerializer
 
 class FileUpload(CreateAPIView):
-	queryset=File.objects.all()
 	serializer_class=FileSerializer
 	def perform_create(self, serializer):
+		serializer.is_valid()
 		serializer.save(owner=self.request.user)
+		return Response(serializer.data, status=HTTP_201_CREATED)
 
 class FileView(ListAPIView):
 	serializer_class=FileSerializer	
@@ -45,7 +49,6 @@ class FileDelete(DestroyAPIView):
 	lookup_field='filename'
 
 from rest_framework.response import Response
-from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
 from rest_framework.views import APIView
 
 class LoginAPIView(APIView):
